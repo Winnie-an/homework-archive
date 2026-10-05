@@ -129,6 +129,23 @@ def cmd_scan(args) -> int:
     exts = _parse_exts(args.ext)
     files = _collect_files(base, exts, args.recursive)
 
+    # --json：输出结构化 JSON，便于脚本化集成
+    if getattr(args, "json", False):
+        payload = {
+            "dir": str(base),
+            "count": len(files),
+            "files": [
+                {
+                    "name": p.name,
+                    "size": size,
+                    "mtime": datetime.fromtimestamp(mtime).isoformat(timespec="seconds"),
+                }
+                for p, size, mtime in files
+            ],
+        }
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+        return 0
+
     print(f"扫描目录：{base}")
     print(f"文件数量：{len(files)}" + (f"（过滤扩展名：{', '.join(exts)}）" if exts else "（全部文件）"))
     print("-" * 60)
@@ -519,6 +536,7 @@ def build_parser() -> argparse.ArgumentParser:
         prog="homework_archive.py",
         description="作业文件批量归档脚本：扫描 / 批量改名 / 归档 / 报告 / 撤销",
     )
+    parser.add_argument("--version", action="version", version="homework_archive 1.1.0")
     sub = parser.add_subparsers(dest="command", required=True)
 
     # scan
@@ -526,6 +544,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_scan.add_argument("--dir", required=True, help="要扫描的文件夹")
     p_scan.add_argument("--ext", default="", help="扩展名过滤，逗号分隔，如 .docx,.pdf")
     p_scan.add_argument("--recursive", action="store_true", help="递归包含子文件夹")
+    p_scan.add_argument("--json", action="store_true", help="以 JSON 格式输出扫描结果")
     p_scan.set_defaults(func=cmd_scan)
 
     # rename
