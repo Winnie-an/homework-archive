@@ -11,3 +11,6 @@ __pycache__/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# 工具运行临时目录
+.tmp-tool-results/
