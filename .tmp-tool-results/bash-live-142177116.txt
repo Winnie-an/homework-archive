@@ -1,0 +1,6 @@
+=== 语法检查脚本 ===
+OK
+
+=== 初始化仓库（main 分支）===
+Initialized empty Git repository in /home/user/Doubao/chats/38445590645509634/.git/
+=== 暂存并提交 ===

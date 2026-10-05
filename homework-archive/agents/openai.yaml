@@ -1,0 +1,42 @@
+# agents/openai.yaml
+# 作业文件批量归档脚本 —— 面向 Agent 的工具描述（OpenAI 风格 function/tool schema）
+# 供上层 Agent 按此签名调用 scripts/homework_archive.py。
+name: homework_archive
+description: >
+  批量整理作业/学生文件的命令行工具。可扫描列出文件（大小、修改时间、扩展名过滤）、
+  按规则批量改名（默认先预览、需确认、重名不覆盖）、按学期或类别归档到子文件夹、
+  生成处理报告、撤销最近一次操作。纯命令行，无图形界面。触发词：作业、归档、
+  批量改名、整理文件、扫描文件、撤销改名。
+parameters:
+  type: object
+  properties:
+    command:
+      type: string
+      enum: [scan, rename, archive, report, undo]
+      description: "要执行的操作。"
+    dir:
+      type: string
+      description: "目标文件夹路径。"
+    parts:
+      type: string
+      description: "rename 专用：新文件名的片段顺序索引（0 起，逗号分隔），如 2,0。"
+    delim:
+      type: string
+      default: "_"
+      description: "rename 专用：文件名分隔符，默认下划线。"
+    mode:
+      type: string
+      enum: [category, semester]
+      description: "archive 专用：category=按类别，semester=按学期。"
+    ext:
+      type: string
+      description: "扩展名过滤，逗号分隔，如 .docx,.pdf。"
+    recursive:
+      type: boolean
+      default: false
+      description: "是否递归包含子文件夹。"
+    yes:
+      type: boolean
+      default: false
+      description: "是否确认执行写盘操作（rename/archive/undo）。默认 false 时仅预览、不修改任何文件。"
+  required: [command, dir]

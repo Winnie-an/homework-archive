@@ -1,0 +1,13 @@
+# Python 编译缓存
+__pycache__/
+*.py[cod]
+*.so
+
+# 本脚本在目标文件夹内生成的操作日志/报告目录
+.homework_archive/
+
+# 编辑器与系统
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
